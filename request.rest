@@ -2,7 +2,7 @@ GET http://localhost:8080/images
 
 ###
 
-GET http://localhost:8080/image/1
+GET http://localhost:8080/image/10
 
 
 ###
@@ -11,5 +11,5 @@ POST http://localhost:8080/image
 Content-Type: application/json
 
 {
-  "name": "image1"
+  "name": "image4"
 }

@@ -8,17 +8,17 @@ const saveImage = async (req: Request, res: Response) => {
   }
 };
 
-const getImageById = (req: Request, res: Response) => {
+const getImageById = async (req: Request, res: Response) => {
   if (true) {
-    imageServices.getImageById();
-    return res.status(200).json({ msg: "get image by id", id: req.params })
+    const result = await imageServices.getImageById(req, res);
+    return res.status(200).json({ msg: "get image by id", response: result })
   }
 };
 
-const getAllImages = (req: Request, res: Response) => {
+const getAllImages = async (req: Request, res: Response) => {
   if (true) {
-    imageServices.getImages();
-    return res.status(200).json({ msg: "get all images", parameters: req.params })
+    const result = await imageServices.getImages();
+    return res.status(200).json({ msg: "get all images", response: result })
   }
 };
 
