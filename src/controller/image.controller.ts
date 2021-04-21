@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import imageServices from '../service/image.service';
 
-const saveImage = (req: Request, res: Response) => {
+const saveImage = async (req: Request, res: Response) => {
   if (true) {
-    imageServices.saveImage()
-    return res.status(200).json({ msg: "posted image saved", paramaters: req.params })
+    const result = await imageServices.saveImage(req, res);
+    return res.status(200).json({ msg: "posted image saved", response: result })
   }
 };
 

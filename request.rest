@@ -8,3 +8,8 @@ GET http://localhost:8080/image/1
 ###
 
 POST http://localhost:8080/image
+Content-Type: application/json
+
+{
+  "name": "image1"
+}
