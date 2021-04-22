@@ -2,7 +2,7 @@ GET http://localhost:8080/images
 
 ###
 
-GET http://localhost:8080/image/10
+GET http://localhost:8080/image/22
 
 
 ###
