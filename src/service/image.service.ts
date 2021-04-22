@@ -5,7 +5,6 @@ import storage from '../functions/storage';
 
 const saveImage = async (req: Request, res: Response) => {
   storage.saveFile(req, res, 'imageToUpload', async (requestFile) => {
-  
     const mediumThumbnailPath = resize.resizeImage(requestFile, 200, 200)
     const smallThumbnailPath = resize.resizeImage(requestFile, 100, 100)
   
@@ -16,7 +15,7 @@ const saveImage = async (req: Request, res: Response) => {
         await db.saveThumbnail(newImage, mediumThumbnailPath)
         await db.saveThumbnail(newImage, smallThumbnailPath)
       }
-      return
+      return "file saved";
     } catch (err) {
       console.error(err.message)
     }
