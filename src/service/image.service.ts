@@ -80,10 +80,10 @@ const getImageById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const image = await pool.query(
-      "SELECT * FROM images WHERE image_id = $1",
+      "SELECT images.image_id, images.image_url, thumbnails.thumbnail_id, thumbnails.thumbnail_url FROM images LEFT JOIN thumbnails ON images.image_id = thumbnails.image_id WHERE images.image_id = $1",
       [id]
     );
-    return image.rows[0];
+    return image.rows;
   } catch (err) {
     console.log(err.message)
   }
