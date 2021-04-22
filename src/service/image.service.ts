@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { Pool } from 'pg';
 import 'dotenv/config';
 import multer from 'multer';
+import sharp from 'sharp';
+import path from 'path';
 
 const pool = new Pool({
   user: process.env.POSTGRES_USER,
@@ -30,8 +32,6 @@ const upload = multer({
 
 const saveImage = async (req: Request, res: Response) => {
   upload(req, res, async (err: any) => {
-    console.log("req.file:", req.file)
-    
     if (!req.file) {
         return res.send('Please select an image to upload');
     }
@@ -41,13 +41,25 @@ const saveImage = async (req: Request, res: Response) => {
     else if (err) {
         return res.send(err);
     }
+
+    const newFilePath = './build/src/public/thumbnails/' + path.parse(req.file.originalname).name + '-resized-200x200' + path.extname(req.file.originalname);
+
+    sharp(req.file.path)
+      .resize(200, 200)
+      .toFile(newFilePath)
+      
     try {
       const url = req.file.destination + req.file.originalname;
       const newImage = await pool.query(
         "INSERT INTO images (image_url) VALUES($1) RETURNING *",
         [url]
       );
-      return newImage.rows[0];
+
+      const newThumbnail = await pool.query(
+        "INSERT INTO thumbnails (image_id, thumbnail_url) VALUES ($1, $2) RETURNING *",
+        [newImage.rows[0].image_id, newFilePath]
+      )
+      return newThumbnail.rows[0];
     } catch (err) {
       console.error(err.message)
     }
