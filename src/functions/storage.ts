@@ -9,7 +9,7 @@ const localStorage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, file.originalname)
   }
-})
+});
 
 const saveFile = async (req: Request, res: Response ,filename: string, callback: (file: any) => void) => {
   const upload = multer({
@@ -18,7 +18,7 @@ const saveFile = async (req: Request, res: Response ,filename: string, callback:
       fieldNameSize: config.storage.fieldNameSize,
       fileSize: config.storage.fileSize
     }
-  }).single(filename)
+  }).single(filename);
   
   upload(req, res, async (err: any) => {
     if (!req.file) {
@@ -31,9 +31,9 @@ const saveFile = async (req: Request, res: Response ,filename: string, callback:
       return res.send(err);
     }
     callback(req.file);
-  })
-}
+  });
+};
 
 export default {
   saveFile
-}
+};

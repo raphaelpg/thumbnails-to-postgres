@@ -19,8 +19,8 @@ const saveOriginalFile = async (url: string) => {
     return newImage;
   } catch (error) {
     return error;
-  }
-}
+  };
+};
 
 const saveThumbnail = async (newImage: QueryResult<any>, path: string) => {
   try {
@@ -30,15 +30,15 @@ const saveThumbnail = async (newImage: QueryResult<any>, path: string) => {
     );
   } catch (error) {
     return error;
-  }
-}
+  };
+};
 
 const returnAllImages = async () => {
     const images = await pool.query(
       "SELECT * FROM images"
     );
     return images.rows;
-}
+};
 
 const returnImageById = async (id: string) => {
   try {
@@ -48,13 +48,13 @@ const returnImageById = async (id: string) => {
     );
     return image.rows;
   } catch (error) {
-    return(error)
-  }
-}
+    return(error);
+  };
+};
 
 export default {
   saveOriginalFile,
   saveThumbnail,
   returnAllImages,
   returnImageById
-}
+};
