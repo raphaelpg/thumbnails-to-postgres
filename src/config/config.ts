@@ -10,9 +10,23 @@ const POSTGRES = {
   database: 'thumbnails_to_postgres'
 }
 
+const STORAGE = {
+  fieldNameSize: 100,
+  fileSize: 60000000,
+  uploadFolder: './build/src/public/uploads/'
+}
+
+const THUMBNAILS = {
+  //thumbnails size in px
+  mediumSize: 200,
+  smallSize: 100
+}
+
 const config = {
   server: SERVER,
-  postgres: POSTGRES
+  postgres: POSTGRES,
+  storage: STORAGE,
+  thumbnails: THUMBNAILS
 }
 
 export default config;

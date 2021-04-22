@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import db from '../functions/db';
 import resize from '../functions/resize';
 import storage from '../functions/storage';
+import config from '../config/config';
 
 const saveImage = async (req: Request, res: Response) => {
   storage.saveFile(req, res, 'imageToUpload', async (requestFile) => {
-    const mediumThumbnailPath = resize.resizeImage(requestFile, 200, 200)
-    const smallThumbnailPath = resize.resizeImage(requestFile, 100, 100)
+    const mediumThumbnailPath = resize.resizeImage(requestFile, config.thumbnails.mediumSize, config.thumbnails.mediumSize)
+    const smallThumbnailPath = resize.resizeImage(requestFile, config.thumbnails.smallSize, config.thumbnails.smallSize)
   
     try {
       const url = requestFile.destination + requestFile.originalname;
