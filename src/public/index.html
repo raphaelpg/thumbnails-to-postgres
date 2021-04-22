@@ -12,18 +12,44 @@
     <title>Thumbnails to Postgres</title>
   </head>
   <body>
-    <div class="container mt-5">
+    <div class="container-lg m-5">
       <h1>Thumbnails to Postgres template:</h1>
       <form class="container m-5" method="post" enctype="multipart/form-data" action="/image">
         <input type="file" name="imageToUpload" id="imageToUpload">
         <button type="submit">Upload</button>
       </form>
+
+      <div class="d-flex flex-column container m-5">
+        <button style="width: 200px;" type="button" onclick="getAllImages()">Get all images</button>
+        <textarea style="width: 1000px; height: 200px;" type="textfield" id="allImagesContainer" name="result" value=""></textarea>
+      </div>
+
+      <div class="d-flex flex-column container m-5">
+        <input style="width: 200px;" type="text" name="imageId" id="imageId">
+        <button style="width: 200px;" type="button" onclick="getImageById()">Get image by id</button>
+        <textarea style="width: 1000px; height: 200px;" type="textfield" id="singleImageContainer" name="result" value=""></textarea>
+      </div>
     </div>
+    <script
+    type="text/javascript"
+    >
+    const getAllImages = async () => {
+      let response = await fetch('/images');
+      let data = await response.json();
+      document.getElementById("allImagesContainer").value = JSON.stringify(data.response, undefined, 4);
+    }
+    const getImageById = async () => {
+      let id = document.getElementById("imageId").value;
+      let response = await fetch(`/image/${id}`);
+      let data = await response.json();
+      document.getElementById("singleImageContainer").value = JSON.stringify(data.response, undefined, 4);
+    }
+    </script>
     <script 
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" 
       integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" 
       crossorigin="anonymous"
-    >
+      >
     </script>
   </body>
 </html>
