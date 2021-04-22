@@ -2,8 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import router from './router/router';
+import config from './config/config';
 
-const PORT = 8080;
+const PORT = config.server.port;
 
 const app = express();
 app.use(cors());

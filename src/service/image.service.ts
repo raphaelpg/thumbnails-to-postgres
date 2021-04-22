@@ -1,17 +1,8 @@
 import { Request, Response } from 'express';
-import { Pool } from 'pg';
-import 'dotenv/config';
 import multer from 'multer';
 import sharp from 'sharp';
 import path from 'path';
-
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  host: 'localhost',
-  port: 5432,
-  database: 'thumbnails_to_postgres'
-});
+import db from '../functions/db';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -55,20 +46,11 @@ const saveImage = async (req: Request, res: Response) => {
 
     try {
       const url = req.file.destination + req.file.originalname;
-      const newImage = await pool.query(
-        "INSERT INTO images (image_url) VALUES($1) RETURNING *",
-        [url]
-      );
-
-      await pool.query(
-        "INSERT INTO thumbnails (image_id, thumbnail_url) VALUES ($1, $2) RETURNING *",
-        [newImage.rows[0].image_id, mediumThumbnailPath]
-      )
-
-      await pool.query(
-        "INSERT INTO thumbnails (image_id, thumbnail_url) VALUES ($1, $2) RETURNING *",
-        [newImage.rows[0].image_id, smallThumbnailPath]
-      )
+      const newImage = await db.saveOriginalFile(url);
+      if (newImage) {
+        await db.saveThumbnail(newImage, mediumThumbnailPath)
+        await db.saveThumbnail(newImage, smallThumbnailPath)
+      }
       return
     } catch (err) {
       console.error(err.message)
@@ -77,26 +59,19 @@ const saveImage = async (req: Request, res: Response) => {
 };
 
 const getImageById = async (req: Request, res: Response) => {
+  const id = req.params.id;
   try {
-    const id = req.params.id;
-    const image = await pool.query(
-      "SELECT images.image_id, images.image_url, thumbnails.thumbnail_id, thumbnails.thumbnail_url FROM images LEFT JOIN thumbnails ON images.image_id = thumbnails.image_id WHERE images.image_id = $1",
-      [id]
-    );
-    return image.rows;
-  } catch (err) {
-    console.log(err.message)
+    return db.returnImageById(id);
+  } catch (error) {
+    console.log(error.message)
   }
 };
 
 const getImages = async () => {
   try {
-    const images = await pool.query(
-      "SELECT * FROM images"
-    )
-    return images.rows;
-  } catch (err) {
-    console.log(err.message)
+    return db.returnAllImages();
+  } catch (error) {
+    console.log(error.message)    
   }
 };
 
