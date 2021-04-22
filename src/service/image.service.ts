@@ -42,12 +42,17 @@ const saveImage = async (req: Request, res: Response) => {
         return res.send(err);
     }
 
-    const newFilePath = './build/src/public/thumbnails/' + path.parse(req.file.originalname).name + '-resized-200x200' + path.extname(req.file.originalname);
+    const mediumThumbnailPath = './build/src/public/thumbnails/' + path.parse(req.file.originalname).name + '-resized-200x200' + path.extname(req.file.originalname);
+    const smallThumbnailPath = './build/src/public/thumbnails/' + path.parse(req.file.originalname).name + '-resized-100x100' + path.extname(req.file.originalname);
 
     sharp(req.file.path)
       .resize(200, 200)
-      .toFile(newFilePath)
-      
+      .toFile(mediumThumbnailPath)
+
+    sharp(req.file.path)
+      .resize(100, 100)
+      .toFile(smallThumbnailPath)
+
     try {
       const url = req.file.destination + req.file.originalname;
       const newImage = await pool.query(
@@ -55,11 +60,16 @@ const saveImage = async (req: Request, res: Response) => {
         [url]
       );
 
-      const newThumbnail = await pool.query(
+      await pool.query(
         "INSERT INTO thumbnails (image_id, thumbnail_url) VALUES ($1, $2) RETURNING *",
-        [newImage.rows[0].image_id, newFilePath]
+        [newImage.rows[0].image_id, mediumThumbnailPath]
       )
-      return newThumbnail.rows[0];
+
+      await pool.query(
+        "INSERT INTO thumbnails (image_id, thumbnail_url) VALUES ($1, $2) RETURNING *",
+        [newImage.rows[0].image_id, smallThumbnailPath]
+      )
+      return
     } catch (err) {
       console.error(err.message)
     }
