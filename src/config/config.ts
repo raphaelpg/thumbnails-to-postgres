@@ -16,17 +16,18 @@ const STORAGE = {
   uploadFolder: './build/src/public/uploads/'
 };
 
-const THUMBNAILS = {
-  //thumbnails size in px
-  mediumSize: 200,
-  smallSize: 100
-};
+//thumbnails size in px, each size will generate a new thumbnail
+const THUMBNAILS = [
+  200,
+  100,
+  50
+];
 
 const config = {
   server: SERVER,
   postgres: POSTGRES,
   storage: STORAGE,
-  thumbnails: THUMBNAILS
+  thumbnails: THUMBNAILS,
 };
 
 export default config;

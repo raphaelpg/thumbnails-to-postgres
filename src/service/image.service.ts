@@ -6,20 +6,21 @@ import config from '../config/config';
 
 const saveImage = async (req: Request, res: Response) => {
   storage.saveFile(req, res, 'imageToUpload', async (requestFile) => {
-    const mediumThumbnailPath = resize.resizeImage(requestFile, config.thumbnails.mediumSize, config.thumbnails.mediumSize);
-    const smallThumbnailPath = resize.resizeImage(requestFile, config.thumbnails.smallSize, config.thumbnails.smallSize);
-  
     try {
       const url = requestFile.destination + requestFile.originalname;
       const newImage = await db.saveOriginalFile(url);
-      if (newImage) {
-        await db.saveThumbnail(newImage, mediumThumbnailPath);
-        await db.saveThumbnail(newImage, smallThumbnailPath);
-      };
+    
+      const thumbnailsSizes = config.thumbnails;
+      thumbnailsSizes.forEach(async size => {
+        const thumbnailPath = resize.resizeImage(requestFile, size, size);
+        if (newImage) {
+          await db.saveThumbnail(newImage, thumbnailPath);
+        };
+      });
       return "file saved";
     } catch (err) {
       console.error(err.message);
-    };
+    }
   });
 };
 
