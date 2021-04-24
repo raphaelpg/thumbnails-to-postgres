@@ -17,9 +17,9 @@ const saveImage = async (req: Request, res: Response) => {
           await db.saveThumbnail(newImage, thumbnailPath);
         };
       });
-      return "file saved";
+      return res.status(200).json({ msg: "posted image saved" });
     } catch (err) {
-      console.error(err.message);
+      return res.status(400).json({ msg: "Error on saving file"});
     }
   });
 };

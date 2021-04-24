@@ -22,13 +22,13 @@ const saveFile = async (req: Request, res: Response ,filename: string, callback:
   
   upload(req, res, async (err: any) => {
     if (!req.file) {
-      return res.send('Please select an image to upload');
+      return res.status(400).json({ msg: "Please select an image to upload"});
     }
     else if (err instanceof multer.MulterError) {
-      return res.send(err);
+      return res.status(400).json({ msg: err.message});
     }
     else if (err) {
-      return res.send(err);
+      return res.status(400).json({ msg: err.message});
     }
     callback(req.file);
   });

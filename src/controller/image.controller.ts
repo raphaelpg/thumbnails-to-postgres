@@ -3,12 +3,7 @@ import imageServices from '../service/image.service';
 
 const saveImage = async (req: Request, res: Response) => {
   //control the the request here...
-  try {
-    const result = await imageServices.saveImage(req, res);
-    return res.status(200).json({ msg: "posted image saved", response: result });
-  } catch (error) {
-    return res.status(400).json({ msg: "Error on saving file"});
-  };
+  return await imageServices.saveImage(req, res);
 };
 
 const getImageById = async (req: Request, res: Response) => {
