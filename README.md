@@ -11,15 +11,11 @@ Upload an image to a local server, create thumbnails and save the urls to a post
 #### Prerequisites  
 * [Git](https://git-scm.com/downloads)  
 * [Node JS](https://nodejs.org/en/)  
+* [TypeScript](https://www.typescriptlang.org/)  
 * [Postgres](https://www.postgresql.org/)  
 
 
 #### 1. Clone the repo and install dependencies   
-```bash
-git clone 
-cd thumbnails-to-postgres
-npm i
-```
 
 #### 2. Modify the .env file  
 Save `sampledotenv` as `.env` and then add your database user and password.  
@@ -28,7 +24,7 @@ Save `sampledotenv` as `.env` and then add your database user and password.
 Customize the setups in the config file '/src/config/config.ts'.  
 
 #### 4. Startup your Postgres  
-Start your postgres and run the commands contained in the database.sql file to create the database and two tables.  
+Start your postgres database and run the commands contained in the database.sql file to create the database and two tables.  
 
 #### 5. Start the server  
 Compile with Typescript and run command npm start.  
